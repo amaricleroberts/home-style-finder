@@ -1,8 +1,8 @@
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
-.App-logo {
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -11,9 +11,9 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
-.App-header {
+/* .App-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -22,9 +22,9 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-}
+} */
 
-.App-link {
+/* .App-link {
   color: #61dafb;
 }
 
@@ -35,4 +35,47 @@
   to {
     transform: rotate(360deg);
   }
+} */
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.page-bg {
+  max-width: 1360px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.content-container {
+  padding: 24px;
+}
+
+.topCard {
+  background: #FFFFFF;
+  border: 5px solid #2D3F5E;
+  width: 100%;
+  padding: 40px;
+}
+
+.group-header {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 700;
+  font-size: 24.88px;
+  line-height: 22px;
+  text-transform: uppercase;
+  margin-top: 1em;
+  letter-spacing: 0.025em;
+}
+
+.group-subheader {
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18.66px;
+  line-height: 22px;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+  margin-top: 1em;
 }
