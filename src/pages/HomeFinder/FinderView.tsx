@@ -1,4 +1,4 @@
-import { UpOutlined } from "@ant-design/icons";
+import { SearchOutlined, UpOutlined } from "@ant-design/icons";
 import { FloatButton, Layout, Menu } from "antd";
 import FeatureSelector from "./FeatureSelector";
 
@@ -6,7 +6,8 @@ const { Content, Footer, Header } = Layout;
 const menuItems = [
   {
     label: 'What Style is This House?',
-    key: 'finder'
+    key: 'finder',
+    icon: <SearchOutlined />
   },
   {
     label: 'Read about Styles',
@@ -35,7 +36,7 @@ export default function FinderView() {
             background: 'rgba(255, 255, 255, 0.2)',
           }}
         />
-        <Menu theme="light" mode="horizontal" items={menuItems} defaultSelectedKeys={['finder']} />
+        <Menu theme="dark" mode="horizontal" items={menuItems} defaultSelectedKeys={['finder']} />
       </Header>
       <Content className="page-bg">
         <div className="content-container">

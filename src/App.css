@@ -89,3 +89,7 @@ body {
   border-color: #476393 !important;
   color: #476393 !important;
 }
+
+.ant-menu-item-selected {
+  background-color: #476393 !important;
+}
