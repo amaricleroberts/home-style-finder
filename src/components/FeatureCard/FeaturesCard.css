@@ -1,0 +1,16 @@
+.ant-card.ant-card-hoverable.ant-card-bordered {
+   height: 280px;
+   border-radius: 0px;
+ }
+
+ .card-unselected.ant-card {
+    border: 1px solid #DAE3EA;
+ }
+
+ .card-unselected.ant-card.ant-card-hoverable.ant-card-bordered:hover {
+  border: 2px solid #97B1C5;
+ }
+
+ .selected-card.ant-card {
+  outline: 3px solid #1D3557
+ }

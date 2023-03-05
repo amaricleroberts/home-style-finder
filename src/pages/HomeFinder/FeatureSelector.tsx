@@ -1,18 +1,21 @@
-import FeatureSectionHeader from './FeatureSectionHeader';
+import FeatureSectionHeader from '../../components/FeatureSectionHeader';
 import { Anchor, Col, Row } from 'antd';
-import FeaturesCard from './FeaturesCard';
-import firestoreQueries from './utils/readFromFirestore';
+import FeaturesCard from '../../components/FeatureCard/FeaturesCard';
+import firestoreQueries from '../../utils/readFromFirestore';
 import { useEffect, useState } from 'react';
 import { DocumentData } from 'firebase/firestore';
-import { HomeFeature, HomePart } from './features/featureList';
+import { HomePart } from '../../features/featureList';
 import { AnchorLinkItemProps } from 'antd/es/anchor/Anchor';
-import EmptyCard from './EmptyCard';
+import EmptyCard from '../../components/ResultsCard/EmptyCard';
+import { useSelector } from 'react-redux';
+import { getSelectedFeatures } from '../../redux/FeatureSlice';
 
 export default function FeatureSelector() {
   const [loading, setLoading] = useState(true);
   const [rawParts, setRawParts] = useState<DocumentData>();
   const [rawFeatures, setRawFeatures] = useState<DocumentData>();
-  const [selectedFeatures, setSelectedFeatures] = useState<{}>({});
+  //const selectedFeatures = useSelector(getSelectedFeatures);
+  //console.log('sf: ', selectedFeatures);
 
   useEffect(() => {
     setLoading(true);
@@ -72,7 +75,7 @@ export default function FeatureSelector() {
           description={feature.description}
           image={feature.image}
           loading={loading}
-          selectedFeatures={selectedFeatures}
+          key={feature.id}
         />
       )
     });

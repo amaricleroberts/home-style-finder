@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card, Col, Image, Typography, Space } from 'antd';
-import { HomeFeature } from './features/featureList';
-import { PlusOutlined } from '@ant-design/icons';
+import { addSelectedFeature, getSelectedFeatures, toggleSelectedFeature } from '../../redux/FeatureSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch } from '../../redux/hooks';
+import './FeaturesCard.css';
 
 type FeaturesCardProps = {
   id: string;
@@ -9,7 +11,6 @@ type FeaturesCardProps = {
   description?: string;
   image: string | undefined;
   loading: boolean;
-  selectedFeatures: {};
 }
 
 export default function FeaturesCard({
@@ -18,17 +19,20 @@ export default function FeaturesCard({
   description,
   image,
   loading,
-  selectedFeatures,
 }: FeaturesCardProps) {
   const imagePath = (image) ? image : 'placeholder.png';
+  const dispatch = useAppDispatch();
+  const selectedFeatures = useSelector(getSelectedFeatures);
+  // console.log('sf: ', selectedFeatures);
+
   return (
     <Col lg={8} sm={12}>
       <Card 
         title={title}
-        style={{height: '280px'}}
         hoverable
         loading={loading}
         onClick={() => toggleFeature(id)}
+        className={selectedFeatures.includes(id) ? 'selected-card' : 'card-unselected'}
       >
         <Space direction='vertical' align='center' style={{width: '100%'}}>
           <Image
@@ -44,7 +48,6 @@ export default function FeaturesCard({
   )
 
   function toggleFeature(featureKey: string): void {
-    console.log(featureKey);
-    selectedFeatures = {...selectedFeatures, featureKey};
+    dispatch(toggleSelectedFeature(featureKey));
   }
 }

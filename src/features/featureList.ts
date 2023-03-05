@@ -11,3 +11,8 @@ export type HomeFeature = {
   image?: string;
   parentId?: string;
 };
+
+export type HomeStyle = {
+  id: string;
+  display_name: string;
+};
