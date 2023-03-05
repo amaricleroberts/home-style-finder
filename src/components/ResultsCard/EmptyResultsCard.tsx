@@ -1,5 +1,5 @@
 import { HomeOutlined } from "@ant-design/icons";
-import { Space, Typography } from "antd";
+import { Space } from "antd";
 import styled from "styled-components";
 
 const WrapperDiv = styled.div`
@@ -11,12 +11,20 @@ const WrapperDiv = styled.div`
   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 `;
 
+const StyledSubtitle = styled.p`
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 1rem;
+  line-height: .5rem;
+  letter-spacing: 0em;
+  text-align: center;
+`;
+
 export default function EmptyResultsCard() {
   return (
     <WrapperDiv>
       <Space direction="vertical" align="center" size="large" style={{ width: '100%' }}>
         <HomeOutlined style={{ fontSize: '45px', color: "#2D3F5E" }} />
-        <Typography.Paragraph>To get started, select some features from the sections below.</Typography.Paragraph>
+        <StyledSubtitle>To get started, select some features from the sections below.</StyledSubtitle>
       </Space>
     </WrapperDiv>
   )

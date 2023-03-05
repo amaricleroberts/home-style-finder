@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Row, Space, Tag } from "antd";
+import { Button, Col, Row, Space, Tag } from "antd";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { HomeFeature } from "../../features/featureList";
@@ -16,6 +16,7 @@ const WrapperDiv = styled.div`
 const FeatureTag = styled(Tag)`
   color: #4D5C6A;
   border-radius: 1px;
+  margin: 4px 4px;
 `;
 const SelectedFeaturesHeader = styled.p`
   font-family: Georgia, 'Times New Roman', Times, serif;
@@ -26,14 +27,7 @@ const SelectedFeaturesHeader = styled.p`
   letter-spacing: 0em;
   text-align: left;
 `;
-const SubmitButton = styled(Button)`
-  border-radius: 0px;
-  background-color: #2D3F5E;
-`;
-const ResetButton = styled(Button)`
-  border-radius: 0px;
-  color: #2D3F5E;
-`;
+
 export default function CardWithFeatures() {
   const selectedFeatures = useSelector(getSelectedFeatures);
   const dispatch = useAppDispatch();
@@ -46,11 +40,13 @@ export default function CardWithFeatures() {
       <Row style={{ marginBottom: '6px' }}>
         <SelectedFeaturesHeader>Selected Features:</SelectedFeaturesHeader>
       </Row>
-      <Row>{children}</Row>
+      <Row style={{ marginBottom: '8px' }}>
+        <Col span={24}>{children}</Col>
+      </Row>
       <Row justify='end'>
         <Space direction="horizontal">
-          <SubmitButton type='primary' icon={<SearchOutlined />}>Find Style</SubmitButton>
-          <ResetButton onClick={clearFeatures}>Clear</ResetButton>
+          <Button type='primary' icon={<SearchOutlined />}>Find Style</Button>
+          <Button onClick={clearFeatures}>Clear</Button>
         </Space>
       </Row>
     </WrapperDiv>

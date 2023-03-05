@@ -1,3 +1,4 @@
+import { UpOutlined } from "@ant-design/icons";
 import { FloatButton, Layout, Menu } from "antd";
 import FeatureSelector from "./FeatureSelector";
 
@@ -39,7 +40,7 @@ export default function FinderView() {
       <Content className="page-bg">
         <div className="content-container">
           <FeatureSelector />
-          <FloatButton.BackTop />
+          <FloatButton.BackTop icon={<UpOutlined />}/>
         </div>
       </Content>
       <Footer style={{ textAlign: 'center' }}>Blah blah blah</Footer>

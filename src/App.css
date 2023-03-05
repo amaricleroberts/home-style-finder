@@ -72,3 +72,20 @@ body {
   text-transform: uppercase;
   margin-top: 1em;
 }
+
+.ant-btn {
+  border-radius: 0px;
+}
+
+.ant-btn-primary {
+  background-color: #2D3F5E;
+}
+
+.ant-btn-primary:hover {
+  background-color: #476393 !important;
+}
+
+.ant-btn-default:hover {
+  border-color: #476393 !important;
+  color: #476393 !important;
+}
