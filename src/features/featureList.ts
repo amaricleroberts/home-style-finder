@@ -7,6 +7,7 @@ export type HomePart = {
 export type HomeFeature = {
   id: string;
   title: string;
+  fullTitle: string;
   description?: string;
   image?: string;
   parentId?: string;
@@ -15,4 +16,9 @@ export type HomeFeature = {
 export type HomeStyle = {
   id: string;
   display_name: string;
+};
+
+export interface RawStyleMatch {
+  key: string;
+  score: number;
 };

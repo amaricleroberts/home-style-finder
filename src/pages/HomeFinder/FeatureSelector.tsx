@@ -46,6 +46,7 @@ export default function FeatureSelector() {
     featureCategories[featureDocData.parent.id].features.push({
       id: doc.id,
       title: featureDocData.display_name,
+      fullTitle: featureDocData.full_display_name ? featureDocData.full_display_name: featureDocData.display_name,
       description: featureDocData.description,
       image: featureDocData.image_path,
       parentId: featureDocData.parent.id,

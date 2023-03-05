@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HomeFeature, HomeStyle } from "../features/featureList";
+import { HomeFeature, RawStyleMatch } from "../features/featureList";
 import { RootState } from "./store";
 
 type FeatureState = {
   selectedFeatures: HomeFeature[];
-  matches: HomeStyle[];
+  rawMatches: RawStyleMatch[];
 };
 
 const initialState: FeatureState = {
   selectedFeatures: [],
-  matches: [],
+  rawMatches: [],
 };
 
 export const FeatureSlice = createSlice({
@@ -17,10 +17,10 @@ export const FeatureSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    initializeState(state, { payload: { selectedFeatures, matches },}: PayloadAction<{selectedFeatures: HomeFeature[]; matches: HomeStyle[];}>) {
-      state.selectedFeatures = selectedFeatures;
-      state.matches = matches;
-    },
+    // initializeState(state, { payload: { selectedFeatures, rawMatches },}: PayloadAction<{selectedFeatures: HomeFeature[]; rawMatches: RawStyleMatch;}>) {
+    //   state.selectedFeatures = selectedFeatures;
+    //   state.rawMatches = rawMatches;
+    // },
     removeSelectedFeature(state, { payload: feature}: PayloadAction<HomeFeature>) {
       //TODO - consider using Lodash
       let filtered = state.selectedFeatures.filter((value) => {
@@ -43,10 +43,19 @@ export const FeatureSlice = createSlice({
     },
     clearSelectedFeatures(state) {
       state.selectedFeatures = initialState.selectedFeatures;
+    },
+    addOrIncrementRawMatch(state, { payload: match }: PayloadAction<RawStyleMatch>) {
+      const existingMatch = state.rawMatches.findIndex((value) => value.key === match.key);
+      if (existingMatch > -1) {
+        state.rawMatches[existingMatch].score += match.score;
+      } else {
+        state.rawMatches.push(match);
+      }
     }
   }
 })
 export const getSelectedFeatures = (state: RootState) => state.features.selectedFeatures;
-export const { resetState, initializeState, removeSelectedFeature, toggleSelectedFeature, clearSelectedFeatures } = FeatureSlice.actions;
+export const getRawMatches = (state: RootState) => state.features.rawMatches;
+export const { resetState, removeSelectedFeature, toggleSelectedFeature, clearSelectedFeatures, addOrIncrementRawMatch } = FeatureSlice.actions;
 
 export default FeatureSlice.reducer
