@@ -52,13 +52,6 @@ body {
   padding: 24px;
 }
 
-.topCard {
-  background: #FFFFFF;
-  border: 5px solid #2D3F5E;
-  width: 100%;
-  padding: 40px;
-}
-
 .group-header {
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-weight: 700;

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { DocumentData } from 'firebase/firestore';
 import { HomePart } from '../../features/featureList';
 import { AnchorLinkItemProps } from 'antd/es/anchor/Anchor';
-import EmptyCard from '../../components/ResultsCard/EmptyCard';
+import ResultsCard from '../../components/ResultsCard/ResultsCard';
 import { useSelector } from 'react-redux';
 import { getSelectedFeatures } from '../../redux/FeatureSlice';
 
@@ -97,7 +97,7 @@ export default function FeatureSelector() {
           />
         </Col>
         <Col span={20}>
-          <EmptyCard />
+          <ResultsCard />
           {featureMatrix}
         </Col>
       </Row>

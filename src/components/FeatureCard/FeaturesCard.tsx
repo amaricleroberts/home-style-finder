@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Col, Image, Typography, Space } from 'antd';
-import { addSelectedFeature, getSelectedFeatures, toggleSelectedFeature } from '../../redux/FeatureSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { getSelectedFeatures, toggleSelectedFeature } from '../../redux/FeatureSlice';
+import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../redux/hooks';
 import './FeaturesCard.css';
 

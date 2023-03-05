@@ -42,10 +42,14 @@ export const FeatureSlice = createSlice({
         state.selectedFeatures = removeCurrentFeature;
       }
       else state.selectedFeatures.push(feature);
+    },
+    clearSelectedFeatures(state) {
+      console.log('clearing');
+      state.selectedFeatures = initialState.selectedFeatures;
     }
   }
 })
 export const getSelectedFeatures = (state: RootState) => state.features.selectedFeatures;
-export const { resetState, initializeState, addSelectedFeature, removeSelectedFeature, toggleSelectedFeature } = FeatureSlice.actions;
+export const { resetState, initializeState, addSelectedFeature, removeSelectedFeature, toggleSelectedFeature, clearSelectedFeatures } = FeatureSlice.actions;
 
 export default FeatureSlice.reducer
