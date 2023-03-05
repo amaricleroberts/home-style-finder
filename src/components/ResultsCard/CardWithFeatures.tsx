@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@ant-design/icons";
-import { Button, Row, Space, Tag, Typography } from "antd";
+import { Button, Row, Space, Tag } from "antd";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { clearSelectedFeatures, getSelectedFeatures, removeSelectedFeature } from "../../redux/FeatureSlice";
@@ -9,13 +9,16 @@ const WrapperDiv = styled.div`
   background: #FFFFFF;
   width: 100%;
   padding: 40px;
+  min-height: 200px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 `;
 const FeatureTag = styled(Tag)`
   color: #4D5C6A;
+  border-radius: 1px;
 `;
 const SelectedFeaturesHeader = styled.p`
-  font-family: Libre Baskerville;
-  font-size: 1.35rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: 1.25rem;
   line-height: 0rem;
   font-style: italic;
   font-weight: 400;
@@ -39,7 +42,7 @@ export default function CardWithFeatures() {
   })
   return (
     <WrapperDiv>
-      <Row>
+      <Row style={{ marginBottom: '6px' }}>
         <SelectedFeaturesHeader>Selected Features:</SelectedFeaturesHeader>
       </Row>
       <Row>{children}</Row>

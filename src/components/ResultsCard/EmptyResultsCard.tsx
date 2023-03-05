@@ -3,10 +3,12 @@ import { Space, Typography } from "antd";
 import styled from "styled-components";
 
 const WrapperDiv = styled.div`
-    background: #FFFFFF;
-    border: 4px solid #2D3F5E;
-    width: 100%;
-    padding: 40px;
+  background: #FFFFFF;
+  border: 4px solid #2D3F5E;
+  width: 100%;
+  padding: 40px;
+  min-height: 200px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 `;
 
 export default function EmptyResultsCard() {
