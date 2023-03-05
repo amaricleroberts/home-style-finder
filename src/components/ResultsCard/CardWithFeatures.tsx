@@ -2,6 +2,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { Button, Row, Space, Tag } from "antd";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { HomeFeature } from "../../features/featureList";
 import { clearSelectedFeatures, getSelectedFeatures, removeSelectedFeature } from "../../redux/FeatureSlice";
 import { useAppDispatch } from "../../redux/hooks";
 
@@ -38,7 +39,7 @@ export default function CardWithFeatures() {
   const dispatch = useAppDispatch();
 
   const children = selectedFeatures.map((feature) => {
-    return <FeatureTag key={feature} closable onClose={() => removeFeature(feature)}>{feature}</FeatureTag>
+    return <FeatureTag key={feature.id} closable onClose={() => removeFeature(feature)}>{feature.title}</FeatureTag>
   })
   return (
     <WrapperDiv>
@@ -59,7 +60,7 @@ export default function CardWithFeatures() {
     dispatch(clearSelectedFeatures());
   }
 
-  function removeFeature(feature: string) {
+  function removeFeature(feature: HomeFeature) {
     dispatch(removeSelectedFeature(feature));
   }
   

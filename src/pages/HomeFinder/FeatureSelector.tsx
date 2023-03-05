@@ -70,10 +70,7 @@ export default function FeatureSelector() {
     curCategory.features.forEach((feature) => {
       featureCards.push(
         <FeaturesCard 
-          id={feature.id}
-          title={feature.title}
-          description={feature.description}
-          image={feature.image}
+          feature={feature}
           loading={loading}
           key={feature.id}
         />

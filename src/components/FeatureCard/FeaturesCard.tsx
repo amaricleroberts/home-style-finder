@@ -4,23 +4,18 @@ import { getSelectedFeatures, toggleSelectedFeature } from '../../redux/FeatureS
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '../../redux/hooks';
 import './FeaturesCard.css';
+import { HomeFeature } from '../../features/featureList';
 
 type FeaturesCardProps = {
-  id: string;
-  title: string;
-  description?: string;
-  image: string | undefined;
+  feature: HomeFeature;
   loading: boolean;
 }
 
 export default function FeaturesCard({
-  id,
-  title,
-  description,
-  image,
+  feature,
   loading,
 }: FeaturesCardProps) {
-  const imagePath = (image) ? image : 'placeholder.png';
+  const imagePath = (feature.image) ? feature.image : 'placeholder.png';
   const dispatch = useAppDispatch();
   const selectedFeatures = useSelector(getSelectedFeatures);
   // console.log('sf: ', selectedFeatures);
@@ -28,11 +23,11 @@ export default function FeaturesCard({
   return (
     <Col lg={8} sm={12}>
       <Card 
-        title={title}
+        title={feature.title}
         hoverable
         loading={loading}
-        onClick={() => toggleFeature(id)}
-        className={selectedFeatures.includes(id) ? 'selected-card' : 'card-unselected'}
+        onClick={() => toggleFeature(feature)}
+        className={selectedFeatures.includes(feature) ? 'selected-card' : 'card-unselected'}
       >
         <Space direction='vertical' align='center' style={{width: '100%'}}>
           <Image
@@ -41,13 +36,13 @@ export default function FeaturesCard({
             height={135}
             width={135}
           />
-          <Typography.Text>{description}</Typography.Text>
+          <Typography.Text>{feature.description}</Typography.Text>
         </Space>
       </Card>
     </Col>
   )
 
-  function toggleFeature(featureKey: string): void {
-    dispatch(toggleSelectedFeature(featureKey));
+  function toggleFeature(feature: HomeFeature): void {
+    dispatch(toggleSelectedFeature(feature));
   }
 }

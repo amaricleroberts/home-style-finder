@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HomeStyle } from "../features/featureList";
+import { HomeFeature, HomeStyle } from "../features/featureList";
 import { RootState } from "./store";
 
 type FeatureState = {
-  selectedFeatures: string[];
+  selectedFeatures: HomeFeature[];
   matches: HomeStyle[];
 };
 
@@ -17,39 +17,36 @@ export const FeatureSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    initializeState(state, { payload: { selectedFeatures, matches },}: PayloadAction<{selectedFeatures: string[]; matches: HomeStyle[];}>) {
+    initializeState(state, { payload: { selectedFeatures, matches },}: PayloadAction<{selectedFeatures: HomeFeature[]; matches: HomeStyle[];}>) {
       state.selectedFeatures = selectedFeatures;
       state.matches = matches;
     },
-    addSelectedFeature(state, { payload: feature }: PayloadAction<string>) {
-      console.log('adding: ', feature);
-      state.selectedFeatures.push(feature);
-    },
-    removeSelectedFeature(state, { payload: feature}: PayloadAction<string>) {
+    removeSelectedFeature(state, { payload: feature}: PayloadAction<HomeFeature>) {
       //TODO - consider using Lodash
-      console.log('removing: ', feature);
       let filtered = state.selectedFeatures.filter((value) => {
-        return value !== feature;
+        return value.id !== feature.id;
       });
       state.selectedFeatures = filtered;
     },
-    toggleSelectedFeature(state, { payload: feature}: PayloadAction<string>) {
-      console.log('toggling: ', feature);
-      if(state.selectedFeatures.includes(feature)) {
+    toggleSelectedFeature(state, { payload: feature}: PayloadAction<HomeFeature>) {
+      const filteredFeatures = state.selectedFeatures.filter((value) => {
+        return value.id === feature.id;
+      });
+
+      if(filteredFeatures.length) {
         let removeCurrentFeature = state.selectedFeatures.filter((value) => {
-          return value !== feature;
+          return value.id !== feature.id;
         });
         state.selectedFeatures = removeCurrentFeature;
       }
       else state.selectedFeatures.push(feature);
     },
     clearSelectedFeatures(state) {
-      console.log('clearing');
       state.selectedFeatures = initialState.selectedFeatures;
     }
   }
 })
 export const getSelectedFeatures = (state: RootState) => state.features.selectedFeatures;
-export const { resetState, initializeState, addSelectedFeature, removeSelectedFeature, toggleSelectedFeature, clearSelectedFeatures } = FeatureSlice.actions;
+export const { resetState, initializeState, removeSelectedFeature, toggleSelectedFeature, clearSelectedFeatures } = FeatureSlice.actions;
 
 export default FeatureSlice.reducer
