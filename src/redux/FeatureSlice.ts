@@ -1,15 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HomeFeature, RawStyleMatch } from "../features/featureList";
+import { HomeFeature, HomeStyle, RawStyleMatch } from "../features/featureList";
 import { RootState } from "./store";
 
 type FeatureState = {
   selectedFeatures: HomeFeature[];
   rawMatches: RawStyleMatch[];
+  parsedMatches: HomeStyle[];
 };
 
 const initialState: FeatureState = {
   selectedFeatures: [],
   rawMatches: [],
+  parsedMatches: [],
 };
 
 export const FeatureSlice = createSlice({
@@ -51,11 +53,23 @@ export const FeatureSlice = createSlice({
       } else {
         state.rawMatches.push(match);
       }
+      console.log(state.rawMatches);
+    },
+    setParsedMatches(state, { payload: match }: PayloadAction<HomeStyle[]>) {
+      state.parsedMatches = match;
     }
   }
 })
 export const getSelectedFeatures = (state: RootState) => state.features.selectedFeatures;
 export const getRawMatches = (state: RootState) => state.features.rawMatches;
-export const { resetState, removeSelectedFeature, toggleSelectedFeature, clearSelectedFeatures, addOrIncrementRawMatch } = FeatureSlice.actions;
+export const getParsedMatches = (state: RootState) => state.features.parsedMatches;
+export const { 
+  resetState,
+  removeSelectedFeature,
+  toggleSelectedFeature,
+  clearSelectedFeatures,
+  addOrIncrementRawMatch,
+  setParsedMatches,
+} = FeatureSlice.actions;
 
 export default FeatureSlice.reducer

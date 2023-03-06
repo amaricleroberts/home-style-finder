@@ -1,5 +1,5 @@
-import { SearchOutlined } from "@ant-design/icons";
-import { Button, Col, Row, Space, Tag } from "antd";
+import { Loading3QuartersOutlined, ReadOutlined, SearchOutlined } from "@ant-design/icons";
+import {  Button, Card, Col, List, Modal, notification, Row, Space, Tag } from "antd";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import { addOrIncrementRawMatch, clearSelectedFeatures, getRawMatches, getSelect
 import { useAppDispatch } from "../../redux/hooks";
 import firestoreQueries from "../../utils/readFromFirestore";
 
-const WrapperDiv = styled.div`
+export const WrapperDiv = styled.div`
   background: #FFFFFF;
   width: 100%;
   padding: 40px;
@@ -21,7 +21,7 @@ const FeatureTag = styled(Tag)`
   border-radius: 1px;
   margin: 4px 4px;
 `;
-const SelectedFeaturesHeader = styled.p`
+export const FeatureCardSubtitle = styled.p`
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 1.25rem;
   line-height: 0rem;
@@ -30,65 +30,117 @@ const SelectedFeaturesHeader = styled.p`
   letter-spacing: 0em;
   text-align: left;
 `;
+const ResultsModal = styled(Modal)`
+  border-radius: 0px;
+  width: 600px;
+`;
 
 export default function CardWithFeatures() {
-  const [loading, setLoading] = useState(true);
-  const [rawStyleResults, setRawStyleResults] = useState<DocumentData>();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const selectedFeatures = useSelector(getSelectedFeatures);
   const styleResults  = useSelector(getRawMatches);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (rawStyleResults) {
-      rawStyleResults.forEach((doc: DocumentData) => {
-        const styleDocData = doc.data();
-        const styleDocKey = Object.keys(styleDocData)[0];
-        populateRawMatch(
-          { key: styleDocKey, 
-            score: styleDocData[styleDocKey]
-          }
-        );
-      })
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rawStyleResults]);
-
-  console.log('parsed res: ', styleResults);
-
   const children = selectedFeatures.map((feature) => {
-    return <FeatureTag key={feature.id} closable onClose={() => removeFeature(feature)}>{feature.fullTitle}</FeatureTag>
+    return (
+      <FeatureTag
+        key={feature.id}
+        closable
+        onClose={() => removeFeature(feature)}
+      >
+        {feature.fullTitle}
+      </FeatureTag>
+    );
   })
+  const cardToUse = loading ? 
+    (
+      <WrapperDiv>
+        <Row justify={'center'}>
+          <Space direction="vertical" align="center">
+            <Loading3QuartersOutlined
+              spin={true}
+              style={{ fontSize: '55px', color: '#457B9D'}}
+            />
+            <FeatureCardSubtitle>Calculating home style...</FeatureCardSubtitle>
+          </Space>
+        </Row>
+      </WrapperDiv>
+    ) :
+    (
+      <WrapperDiv>
+        <Row style={{ marginBottom: '6px' }}>
+          <FeatureCardSubtitle>Selected Features:</FeatureCardSubtitle>
+        </Row>
+        <Row style={{ marginBottom: '8px' }}>
+          <Col span={24}>{children}</Col>
+        </Row>
+        <Row justify='end'>
+          <Space direction="horizontal">
+            <Button type='primary' icon={<SearchOutlined />} onClick={searchForFeatures}>Find Style</Button>
+            <Button onClick={clearFeatures}>Clear</Button>
+          </Space>
+        </Row>
+      </WrapperDiv>
+    );
   return (
-    <WrapperDiv>
-      <Row style={{ marginBottom: '6px' }}>
-        <SelectedFeaturesHeader>Selected Features:</SelectedFeaturesHeader>
-      </Row>
-      <Row style={{ marginBottom: '8px' }}>
-        <Col span={24}>{children}</Col>
-      </Row>
-      <Row justify='end'>
-        <Space direction="horizontal">
-          <Button type='primary' icon={<SearchOutlined />} onClick={searchForFeatures}>Find Style</Button>
-          <Button onClick={clearFeatures}>Clear</Button>
-        </Space>
-      </Row>
-    </WrapperDiv>
+    <>
+      {cardToUse}
+      <ResultsModal 
+        open={resultModalOpen}
+        closable={false}
+        cancelText="Go back"
+        okText="Start a New Search"
+        onCancel={() => setResultModalOpen(false)}
+        onOk={() => {
+          clearFeatures();
+          setResultModalOpen(false);
+        }}
+      >
+        <List 
+          header={<FeatureCardSubtitle>RESULTS</FeatureCardSubtitle>}
+          loading={loading}
+        >
+          <List.Item
+            actions={
+              [<Button type='default' icon={<ReadOutlined />}>Read More</Button>]
+            }
+          >
+            <p>{styleResults[0]?.key}</p>
+          </List.Item>
+        </List>
+      </ResultsModal>
+    </>
   );
 
   function searchForFeatures() {
     setLoading(true);
+    setResultModalOpen(true);
     const featureKeys = selectedFeatures.map((feature) => {
       return feature.id;
     });
     firestoreQueries.getCollectionByQueryingId('/feature_styles', 'in', featureKeys)
       .then(
         (data) => {
-          setRawStyleResults(data);
+          data.forEach((doc: DocumentData) => {
+            const styleDocData = doc.data();
+            const styleDocKey = Object.keys(styleDocData)[0];
+            populateRawMatch(
+              {
+                key: styleDocKey,
+                score: styleDocData[styleDocKey]
+              }
+            );
+          });
         }
       );
+    setLoading(false);
+    //TODO - why doesn't this work?
+    //clearFeatures();
   }
 
   function clearFeatures() {
+    console.log('clearing');
     dispatch(clearSelectedFeatures());
   }
 
