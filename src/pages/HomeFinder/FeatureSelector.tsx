@@ -19,17 +19,17 @@ export default function FeatureSelector() {
 
   useEffect(() => {
     setLoading(true);
-    const partsPromise = firestoreQueries.getCollection('/parts/').then((data) => {
+    const partsPromise = firestoreQueries.getCollectionOrdered('parts', 'priority', true).then((data) => {
       setRawParts(data)
     });
-    const featuresPromise = firestoreQueries.getCollection('features').then((data) => {
+    const featuresPromise = firestoreQueries.getCollectionOrdered('features', 'priority', true).then((data) => {
       setRawFeatures(data)
     });
     Promise.all([partsPromise, featuresPromise]).finally(() => setLoading(false));
   }, []);
 
   let featureCategories: {[key: string]: HomePart} = {};
-  if (rawParts) rawParts.forEach((doc: DocumentData) => {
+  if (rawParts !== undefined) rawParts.forEach((doc: DocumentData) => {
     const partDocData = doc.data();
     featureCategories = 
     { ...featureCategories, 
@@ -43,14 +43,18 @@ export default function FeatureSelector() {
 
   if (rawFeatures) rawFeatures.forEach((doc: DocumentData) => {
     const featureDocData = doc.data();
-    featureCategories[featureDocData.parent.id].features.push({
-      id: doc.id,
-      title: featureDocData.display_name,
-      fullTitle: featureDocData.full_display_name ? featureDocData.full_display_name: featureDocData.display_name,
-      description: featureDocData.description,
-      image: featureDocData.image_path,
-      parentId: featureDocData.parent.id,
-    });
+    if (featureCategories[featureDocData.parent.id]) {
+      featureCategories[featureDocData.parent.id].features.push({
+        id: doc.id,
+        title: featureDocData.display_name,
+        fullTitle: featureDocData.full_display_name ? featureDocData.full_display_name: featureDocData.display_name,
+        description: featureDocData.description,
+        image: featureDocData.image_path,
+        parentId: featureDocData.parent.id,
+      });
+    } else {
+      console.warn('missing part category: ', featureDocData.parent.id);
+    }
   });
 
   const featureMatrix: JSX.Element[] = [];

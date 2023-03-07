@@ -1,5 +1,5 @@
-import { getDoc, doc, collection, DocumentReference, CollectionReference, getDocs, query, Query, WhereFilterOp, documentId} from "@firebase/firestore"
-import { DocumentData, where, FieldPath } from "firebase/firestore";
+import { getDoc, doc, collection, DocumentReference, CollectionReference, getDocs, query, Query, WhereFilterOp, documentId, orderBy} from "@firebase/firestore"
+import { DocumentData, where } from "firebase/firestore";
 import { firestore } from "./firebase"
 
 const firestoreQueries = {
@@ -10,6 +10,11 @@ const firestoreQueries = {
   getCollection: (path: string): Promise<DocumentData> => {
     const queryDoc = collection(firestore, path);
     return getDocuments(queryDoc);
+  },
+  getCollectionOrdered: (path: string, orderKey: string, asc: boolean): Promise<DocumentData> => {
+    const queryDoc = collection(firestore, path);
+    const q = query(queryDoc, orderBy(orderKey, asc ? 'asc' : 'desc'));
+    return getDocumentsFromQuery(q);
   },
   getCollectionByQueryingId: (path: string, operator: WhereFilterOp, operands: string[]): Promise<DocumentData> => {
     const queryDoc = collection(firestore, path);
