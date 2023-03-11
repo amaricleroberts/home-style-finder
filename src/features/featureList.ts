@@ -16,9 +16,11 @@ export type HomeFeature = {
 export type HomeStyle = {
   id: string;
   display_name: string;
+  time_period?: string;
+  origin?: string;
 };
 
-export interface RawStyleMatch {
+export interface StyleMatchCandidate {
   key: string;
   score: number;
 };

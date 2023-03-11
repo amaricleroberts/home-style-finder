@@ -8,14 +8,15 @@ import { HomePart } from '../../features/featureList';
 import { AnchorLinkItemProps } from 'antd/es/anchor/Anchor';
 import ResultsCard from '../../components/ResultsCard/ResultsCard';
 import { useSelector } from 'react-redux';
-import { getSelectedFeatures } from '../../redux/FeatureSlice';
+import { addOrIncrementMatchCandidate, getSelectedFeatures } from '../../redux/FeatureSlice';
+import { useAppDispatch } from '../../redux/hooks';
 
 export default function FeatureSelector() {
   const [loading, setLoading] = useState(true);
   const [rawParts, setRawParts] = useState<DocumentData>();
   const [rawFeatures, setRawFeatures] = useState<DocumentData>();
-  //const selectedFeatures = useSelector(getSelectedFeatures);
-  //console.log('sf: ', selectedFeatures);
+  const selectedFeatures = useSelector(getSelectedFeatures);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setLoading(true);
@@ -27,6 +28,34 @@ export default function FeatureSelector() {
     });
     Promise.all([partsPromise, featuresPromise]).finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const featureKeys = selectedFeatures.map((feature) => {
+      return feature.id;
+    });
+
+    console.log('latest feature keys: ', featureKeys);
+    if (featureKeys.length) {
+      firestoreQueries.getCollectionByQueryingId('/feature_styles', 'in', featureKeys)
+        .then(
+          (data) => {
+            data.forEach((doc: DocumentData) => {
+              const styleDocData = doc.data();
+              console.log('match candidate doc data: ', styleDocData);
+              const styleDocKey = Object.keys(styleDocData)[0];
+              dispatch(addOrIncrementMatchCandidate(
+                {
+                  key: styleDocKey,
+                  score: styleDocData[styleDocKey]
+                }
+              ));
+            });
+          }
+        )
+        .catch((error) => console.warn(error))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedFeatures]);
 
   let featureCategories: {[key: string]: HomePart} = {};
   if (rawParts !== undefined) rawParts.forEach((doc: DocumentData) => {
@@ -106,3 +135,4 @@ export default function FeatureSelector() {
     </>
   );
 }
+

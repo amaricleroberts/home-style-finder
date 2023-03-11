@@ -35,10 +35,12 @@ function getDocuments(docRef: CollectionReference): Promise<DocumentData> {
   })
 }
 
-function getDocumentsFromQuery(docRef: Query<DocumentData>): Promise<DocumentData> {
-  return getDocs(docRef).catch((error) => {
-    return Promise.reject(error);
-  })
+async function getDocumentsFromQuery(docRef: Query<DocumentData>): Promise<DocumentData> {
+  try {
+    return await getDocs(docRef);
+  } catch (error) {
+    return await Promise.reject(error);
+  }
 }
 
 export default firestoreQueries;

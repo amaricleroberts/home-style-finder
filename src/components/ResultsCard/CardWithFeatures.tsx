@@ -1,11 +1,11 @@
 import { Loading3QuartersOutlined, ReadOutlined, SearchOutlined } from "@ant-design/icons";
-import {  Button, Card, Col, List, Modal, notification, Row, Space, Tag } from "antd";
+import {  Button, Col, List, Modal, Row, Space, Tag } from "antd";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { HomeFeature, RawStyleMatch } from "../../features/featureList";
-import { addOrIncrementRawMatch, clearSelectedFeatures, getRawMatches, getSelectedFeatures, removeSelectedFeature } from "../../redux/FeatureSlice";
+import { HomeFeature } from "../../features/featureList";
+import { addSelectedMatch, calculateFinalMatches, getMatchCandidates, getSelectedFeatures, getSelectedMatches, removeSelectedFeature, resetState } from "../../redux/FeatureSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import firestoreQueries from "../../utils/readFromFirestore";
 
@@ -39,8 +39,32 @@ export default function CardWithFeatures() {
   const [loading, setLoading] = useState<boolean>(false);
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const selectedFeatures = useSelector(getSelectedFeatures);
-  const styleResults  = useSelector(getRawMatches);
+  const matchCandidates = useSelector(getMatchCandidates);
+  const selectedMatches = useSelector(getSelectedMatches);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (matchCandidates.length) {
+        const styleMatchIds: string[] = matchCandidates.map((match) => {
+          return match.key;
+        });
+        console.log('match ids: ', styleMatchIds);
+
+        firestoreQueries.getCollectionByQueryingId('/styles', 'in', styleMatchIds)
+        .then((data) => {
+          console.log('potential matches: ', data);
+          data.forEach((doc: DocumentData) => {
+            const matchData = doc.data();
+            console.log('raw match data: ', matchData);
+            dispatch(addSelectedMatch({
+              id: doc.id,
+              display_name: matchData.display_name,
+            }));
+          });
+        }).catch((error) => console.warn(error))
+      }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [matchCandidates]);
 
   const children = selectedFeatures.map((feature) => {
     return (
@@ -106,7 +130,7 @@ export default function CardWithFeatures() {
               [<Button type='default' icon={<ReadOutlined />}>Read More</Button>]
             }
           >
-            <p>{styleResults[0]?.key}</p>
+            <p>{selectedMatches[0]?.display_name}</p>
           </List.Item>
         </List>
       </ResultsModal>
@@ -114,42 +138,19 @@ export default function CardWithFeatures() {
   );
 
   function searchForFeatures() {
+    console.log('searching');
     setLoading(true);
-    setResultModalOpen(true);
-    const featureKeys = selectedFeatures.map((feature) => {
-      return feature.id;
-    });
-    firestoreQueries.getCollectionByQueryingId('/feature_styles', 'in', featureKeys)
-      .then(
-        (data) => {
-          data.forEach((doc: DocumentData) => {
-            const styleDocData = doc.data();
-            const styleDocKey = Object.keys(styleDocData)[0];
-            populateRawMatch(
-              {
-                key: styleDocKey,
-                score: styleDocData[styleDocKey]
-              }
-            );
-          });
-        }
-      );
+    dispatch(calculateFinalMatches());
     setLoading(false);
-    //TODO - why doesn't this work?
-    //clearFeatures();
+    setResultModalOpen(true);
   }
 
   function clearFeatures() {
-    console.log('clearing');
-    dispatch(clearSelectedFeatures());
+    dispatch(resetState());
   }
 
   function removeFeature(feature: HomeFeature) {
     dispatch(removeSelectedFeature(feature));
-  }
-
-  function populateRawMatch(match: RawStyleMatch) {
-    dispatch(addOrIncrementRawMatch(match));
   }
   
 }

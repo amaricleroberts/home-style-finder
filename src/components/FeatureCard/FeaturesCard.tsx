@@ -18,7 +18,6 @@ export default function FeaturesCard({
   const imagePath = (feature.image) ? feature.image : 'placeholder.png';
   const dispatch = useAppDispatch();
   const selectedFeatures = useSelector(getSelectedFeatures);
-  // console.log('sf: ', selectedFeatures);
 
   return (
     <Col lg={8} sm={12}>
@@ -26,7 +25,9 @@ export default function FeaturesCard({
         title={feature.title}
         hoverable
         loading={loading}
-        onClick={() => toggleFeature(feature)}
+        onClick={() => {
+          toggleFeature(feature);
+        }}
         className={selectedFeatures.includes(feature) ? 'selected-card' : 'card-unselected'}
       >
         <Space direction='vertical' align='center' style={{width: '100%'}}>
@@ -43,6 +44,7 @@ export default function FeaturesCard({
   )
 
   function toggleFeature(feature: HomeFeature): void {
+    console.log('toggling on feature: ', feature);
     dispatch(toggleSelectedFeature(feature));
   }
 }
