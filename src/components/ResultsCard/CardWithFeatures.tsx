@@ -1,5 +1,5 @@
 import { Loading3QuartersOutlined, ReadOutlined, SearchOutlined } from "@ant-design/icons";
-import {  Button, Col, List, Modal, Row, Space, Tag } from "antd";
+import {  Button, Col, Image, List, Modal, Row, Space, Tag, Typography } from "antd";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import { HomeFeature } from "../../features/featureList";
 import { addSelectedMatch, calculateFinalMatches, getMatchCandidates, getSelectedFeatures, getSelectedMatches, removeSelectedFeature, resetState } from "../../redux/FeatureSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import firestoreQueries from "../../utils/readFromFirestore";
+import FeatureSectionHeader from "../FeatureSectionHeader";
 
 export const WrapperDiv = styled.div`
   background: #FFFFFF;
@@ -101,7 +102,14 @@ export default function CardWithFeatures() {
         </Row>
         <Row justify='end'>
           <Space direction="horizontal">
-            <Button type='primary' icon={<SearchOutlined />} onClick={searchForFeatures}>Find Style</Button>
+            <Button
+              type='primary'
+              icon={<SearchOutlined />}
+              onClick={searchForFeatures}
+              disabled={selectedFeatures.length < 3}
+            >
+              Find Style
+            </Button>
             <Button onClick={clearFeatures}>Clear</Button>
           </Space>
         </Row>
@@ -120,17 +128,31 @@ export default function CardWithFeatures() {
           clearFeatures();
           setResultModalOpen(false);
         }}
+        width={850}
       >
         <List 
           header={<FeatureCardSubtitle>RESULTS</FeatureCardSubtitle>}
           loading={loading}
         >
-          <List.Item
-            actions={
-              [<Button type='default' icon={<ReadOutlined />}>Read More</Button>]
-            }
-          >
-            <p>{selectedMatches[0]?.display_name}</p>
+          <List.Item>
+            <Row gutter={[8, 8]}>
+              <Col span={8}>
+                <Image 
+                  preview={false}
+                  src="/images/style-capecod.webp"
+                />
+              </Col>
+              <Col span={16}>
+                <Space direction='vertical'>
+                  <FeatureSectionHeader 
+                    title={selectedMatches[0]?.display_name }
+                    weight="sub" 
+                    id={selectedMatches[0]?.id} 
+                  />
+                  <Button type='default' icon={<ReadOutlined />}>Learn More</Button>
+                </Space>
+              </Col>
+            </Row>
           </List.Item>
         </List>
       </ResultsModal>
