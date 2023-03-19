@@ -60,6 +60,8 @@ export default function CardWithFeatures() {
             dispatch(addSelectedMatch({
               id: doc.id,
               display_name: matchData.display_name,
+              origin: matchData.origin,
+              images: matchData.images,
             }));
           });
         }).catch((error) => console.warn(error))
@@ -106,7 +108,7 @@ export default function CardWithFeatures() {
               type='primary'
               icon={<SearchOutlined />}
               onClick={searchForFeatures}
-              disabled={selectedFeatures.length < 3}
+              //disabled={selectedFeatures.length < 3}
             >
               Find Style
             </Button>
@@ -139,7 +141,7 @@ export default function CardWithFeatures() {
               <Col span={8}>
                 <Image 
                   preview={false}
-                  src="/images/style-capecod.webp"
+                  src={(selectedMatches[0]?.images) ? `images/${selectedMatches[0].images[0]}` : 'images/placeholder.png'}
                 />
               </Col>
               <Col span={16}>
@@ -164,6 +166,7 @@ export default function CardWithFeatures() {
     setLoading(true);
     dispatch(calculateFinalMatches());
     setLoading(false);
+    console.log(selectedMatches);
     setResultModalOpen(true);
   }
 

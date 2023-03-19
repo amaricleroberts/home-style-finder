@@ -18,6 +18,7 @@ export type HomeStyle = {
   display_name: string;
   time_period?: string;
   origin?: string;
+  images?: string[];
 };
 
 export interface StyleMatchCandidate {
