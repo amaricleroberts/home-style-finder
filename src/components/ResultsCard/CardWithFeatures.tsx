@@ -1,5 +1,5 @@
 import { Loading3QuartersOutlined, ReadOutlined, SearchOutlined } from "@ant-design/icons";
-import {  Button, Col, Image, List, Modal, Row, Space, Tag, Typography } from "antd";
+import {  Button, Carousel, Col, Image, List, Modal, Row, Space, Tag, Typography } from "antd";
 import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -139,10 +139,13 @@ export default function CardWithFeatures() {
           <List.Item>
             <Row gutter={[8, 8]}>
               <Col span={8}>
-                <Image 
-                  preview={false}
-                  src={(selectedMatches[0]?.images) ? `images/${selectedMatches[0].images[0]}` : 'images/placeholder.png'}
-                />
+                <Carousel>
+                  {selectedMatches[0]?.images?.map((image: string, index: number) => {
+                    return (
+                      <Image key={index} src={`images/${image}`} preview={false} width={'200px'} style={{objectFit: 'contain'}} />
+                    )
+                  })}
+                </Carousel>
               </Col>
               <Col span={16}>
                 <Space direction='vertical'>
