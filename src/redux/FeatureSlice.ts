@@ -50,11 +50,17 @@ export const FeatureSlice = createSlice({
     },
     addOrIncrementMatchCandidate(state, { payload: match }: PayloadAction<StyleMatchCandidate>) {
       console.log('candidate: ', match);
-      const existingMatch = state.matchCandidates.findIndex((value) => value.key === match.key);
-      if (existingMatch > -1) {
-        state.matchCandidates[existingMatch].score += match.score;
+      const existingMatch = state.matchCandidates.filter((value) => { return value.key === match.key; });
+      if (existingMatch.length) {
+        const allOtherMatches = state.matchCandidates.filter((value) => { return value.key !== match.key; });
+        const newExistingMatch: StyleMatchCandidate = {
+          key: existingMatch[0].key,
+          score: existingMatch[0].score + match.score
+        };
+        const newState = [...allOtherMatches, newExistingMatch];
+        state.matchCandidates = newState;
       } else {
-        state.matchCandidates.push(match);
+        state.matchCandidates = [...state.matchCandidates, match];
       }
       console.log('all candidate matches: ', state.matchCandidates);
     },
@@ -88,10 +94,10 @@ export const FeatureSlice = createSlice({
       console.log('final candidates: ', finalMatchCandidates);
     },
     addSelectedMatch(state, { payload: match }: PayloadAction<HomeStyle>) {
-      state.selectedMatches.push(match);
+      state.selectedMatches = [...state.selectedMatches, match];
     },
-    setSelectedMatches(state, { payload: match }: PayloadAction<HomeStyle[]>) {
-      state.selectedMatches = match;
+    setSelectedMatches(state, { payload: matches }: PayloadAction<HomeStyle[]>) {
+      state.selectedMatches = matches;
     },
     setMatchCandidates(state, { payload: matches }: PayloadAction<StyleMatchCandidate[]>) {
       state.matchCandidates = matches;
