@@ -32,12 +32,16 @@ export const FeatureSlice = createSlice({
       });
 
       if(filteredFeatures.length) {
+        console.log(`feature ${feature} already exists, removing`);
         let removeCurrentFeature = state.selectedFeatures.filter((value) => {
           return value.id !== feature.id;
         });
         state.selectedFeatures = removeCurrentFeature;
       }
-      else state.selectedFeatures.push(feature);
+      else {
+        const newState = [...state.selectedFeatures, feature];
+        state.selectedFeatures = newState;
+      }
 
       console.log('selected features: ', state.selectedFeatures);
     },

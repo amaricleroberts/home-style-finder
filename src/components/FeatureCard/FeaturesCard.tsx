@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Card, Col, Image, Typography, Space } from 'antd';
 import { getSelectedFeatures, toggleSelectedFeature } from '../../redux/FeatureSlice';
 import { useSelector } from 'react-redux';
@@ -18,6 +18,7 @@ export default function FeaturesCard({
   const imagePath = (feature.image) ? feature.image : 'placeholder.png';
   const dispatch = useAppDispatch();
   const selectedFeatures = useSelector(getSelectedFeatures);
+  let featureKeys: string[] = selectedFeatures.map((feature) => {return feature.id; });
 
   return (
     <Col lg={8} sm={12}>
@@ -28,7 +29,7 @@ export default function FeaturesCard({
         onClick={() => {
           toggleFeature(feature);
         }}
-        className={selectedFeatures.includes(feature) ? 'selected-card' : 'card-unselected'}
+        className={featureKeys.includes(feature.id) ? 'selected-card' : 'card-unselected'}
       >
         <Space direction='vertical' align='center' style={{width: '100%'}}>
           <Image
