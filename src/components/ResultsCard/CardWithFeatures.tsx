@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import { HomeFeature } from "../../features/featureList";
-import { addSelectedMatch, calculateFinalMatches, getMatchCandidates, getSelectedFeatures, getSelectedMatches, removeSelectedFeature, resetState } from "../../redux/FeatureSlice";
+import { addSelectedMatch, calculateFinalMatches, clearSelectedMatches, getMatchCandidates, getSelectedFeatures, getSelectedMatches, removeSelectedFeature, resetState } from "../../redux/FeatureSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import firestoreQueries from "../../utils/readFromFirestore";
 import FeatureSectionHeader from "../FeatureSectionHeader";
@@ -51,6 +51,8 @@ export default function CardWithFeatures() {
         });
         console.log('match ids: ', styleMatchIds);
 
+        dispatch(clearSelectedMatches());
+
         firestoreQueries.getCollectionByQueryingId('/styles', 'in', styleMatchIds)
         .then((data) => {
           console.log('potential matches: ', data);
@@ -80,6 +82,7 @@ export default function CardWithFeatures() {
       </FeatureTag>
     );
   })
+
   const cardToUse = loading ? 
     (
       <WrapperDiv>
@@ -136,29 +139,33 @@ export default function CardWithFeatures() {
           header={<FeatureCardSubtitle>RESULTS</FeatureCardSubtitle>}
           loading={loading}
         >
-          <List.Item>
-            <Row gutter={[8, 8]}>
-              <Col span={8}>
-                <Carousel>
-                  {selectedMatches[0]?.images?.map((image: string, index: number) => {
-                    return (
-                      <Image key={index} src={`images/${image}`} preview={false} width={'200px'} style={{objectFit: 'contain'}} />
-                    )
-                  })}
-                </Carousel>
-              </Col>
-              <Col span={16}>
-                <Space direction='vertical'>
-                  <FeatureSectionHeader 
-                    title={selectedMatches[0]?.display_name }
-                    weight="sub" 
-                    id={selectedMatches[0]?.id} 
-                  />
-                  <Button type='default' icon={<ReadOutlined />}>Learn More</Button>
-                </Space>
-              </Col>
-            </Row>
-          </List.Item>
+            {selectedMatches.map((value, index) => {
+              return (
+                <List.Item key={index}>
+                  <Row gutter={[8, 8]}>
+                    <Col span={8}>
+                      <Carousel>
+                        {value.images?.map((image: string, index: number) => {
+                          return (
+                            <Image key={index} src={`images/${image}`} preview={false} width={'200px'} style={{ objectFit: 'contain' }} />
+                          )
+                        })}
+                      </Carousel>
+                    </Col>
+                    <Col span={16}>
+                      <Space direction='vertical'>
+                        <FeatureSectionHeader
+                          title={value.display_name}
+                          weight="sub"
+                          id={value.id}
+                        />
+                        <Button type='default' icon={<ReadOutlined />}>Learn More</Button>
+                      </Space>
+                    </Col>
+                  </Row>
+                </List.Item>
+              );
+            })}
         </List>
       </ResultsModal>
     </>
@@ -169,7 +176,6 @@ export default function CardWithFeatures() {
     setLoading(true);
     dispatch(calculateFinalMatches());
     setLoading(false);
-    console.log(selectedMatches);
     setResultModalOpen(true);
   }
 

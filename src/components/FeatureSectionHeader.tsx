@@ -15,7 +15,7 @@ export default function FeatureSectionHeader({
 }: FeatureSectionHeaderProps) {
   const typographyClass = weight === 'main' ? 'group-header' : 'group-subheader';
   return (
-    <Row gutter={[24, 24]} key={id}>
+    <Row gutter={[24, 24]}>
       <Typography.Paragraph id={id} className={typographyClass}>{title}</Typography.Paragraph>
     </Row>
   )

@@ -41,14 +41,14 @@ export default function FeatureSelector() {
           (data) => {
             data.forEach((doc: DocumentData) => {
               const styleDocData = doc.data();
-              console.log('match candidate doc data: ', styleDocData);
-              const styleDocKey = Object.keys(styleDocData)[0];
-              dispatch(addOrIncrementMatchCandidate(
-                {
-                  key: styleDocKey,
-                  score: styleDocData[styleDocKey]
-                }
-              ));
+              Object.keys(styleDocData).forEach((key) => {
+                dispatch(addOrIncrementMatchCandidate(
+                  {
+                    key: key,
+                    score: styleDocData[key],
+                  }
+                ));
+              });
             });
           }
         )
@@ -88,11 +88,11 @@ export default function FeatureSelector() {
 
   const featureMatrix: JSX.Element[] = [];
   const anchorItems: AnchorLinkItemProps[] = [];
-  Object.keys(featureCategories).forEach((categoryId) => {
+  Object.keys(featureCategories).forEach((categoryId, index) => {
     const curCategory: HomePart = featureCategories[categoryId];
     if (curCategory.features.length) {
       featureMatrix.push(
-        <FeatureSectionHeader title={curCategory.name} id={curCategory.id} weight='main' />
+        <FeatureSectionHeader key={`title-${index}`} title={curCategory.name} id={curCategory.id} weight='main' />
       ); 
       anchorItems.push({
         key: curCategory.id,
@@ -112,7 +112,7 @@ export default function FeatureSelector() {
     });
     if (featureCards.length) {
       featureMatrix.push(
-        <Row gutter={[24, 24]}>
+        <Row gutter={[24, 24]} key={index}>
           {featureCards}
         </Row>
       );

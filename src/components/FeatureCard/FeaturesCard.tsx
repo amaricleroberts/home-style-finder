@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import { Card, Col, Image, Typography, Space } from 'antd';
 import { getSelectedFeatures, toggleSelectedFeature } from '../../redux/FeatureSlice';
 import { useSelector } from 'react-redux';
@@ -45,7 +45,7 @@ export default function FeaturesCard({
   )
 
   function toggleFeature(feature: HomeFeature): void {
-    console.log('toggling on feature: ', feature);
+    //console.log('toggling on feature: ', feature);
     dispatch(toggleSelectedFeature(feature));
   }
 }
