@@ -3,7 +3,7 @@ import {  Button, Col, Row, Space, Tag } from "antd";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { HomeFeature, HomeStyle, StyleMatchCandidate } from "../../features/featureList";
+import { HomeFeature, HomeStyle } from "../../features/featureList";
 import { getSelectedFeatures, removeSelectedFeature, resetState } from "../../redux/FeatureSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import ResultsModal from "../../ResultsModal/ResultsModal";
@@ -41,8 +41,6 @@ export default function CardWithFeatures({
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const selectedFeatures = useSelector(getSelectedFeatures);
   const dispatch = useAppDispatch();
-
-  console.log(styles);
 
   const children = selectedFeatures.map((feature) => {
     return (

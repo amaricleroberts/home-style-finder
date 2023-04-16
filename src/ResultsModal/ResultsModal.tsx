@@ -37,8 +37,6 @@ export default function ResultsModal({
   const selectedFeatures = useSelector(getSelectedFeatures);
   const [matchCandidates, setMatchCandidates] = useState<StyleMatchCandidate[]>([]);
 
-  console.log(selectedFeatures.length);
-
   useEffect(() => {
     console.log('doing things here');
     setLoading(true);
