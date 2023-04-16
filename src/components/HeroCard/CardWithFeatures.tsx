@@ -7,7 +7,6 @@ import { HomeFeature, HomeStyle, StyleMatchCandidate } from "../../features/feat
 import { getSelectedFeatures, removeSelectedFeature, resetState } from "../../redux/FeatureSlice";
 import { useAppDispatch } from "../../redux/hooks";
 import ResultsModal from "../../ResultsModal/ResultsModal";
-import { calculateMatchCandidates } from "../../utils/functions";
 
 export const WrapperDiv = styled.div`
   background: #FFFFFF;
@@ -41,7 +40,6 @@ export default function CardWithFeatures({
   const [loading, setLoading] = useState<boolean>(false);
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const selectedFeatures = useSelector(getSelectedFeatures);
-  const [matchCandidates, setMatchCandidates] = useState<StyleMatchCandidate[]>([]);
   const dispatch = useAppDispatch();
 
   console.log(styles);
@@ -105,7 +103,6 @@ export default function CardWithFeatures({
           clearFeatures();
           setResultModalOpen(false);
         }}
-        matchCandidates={matchCandidates}
         styles={styles}
       />
     </>
@@ -113,14 +110,7 @@ export default function CardWithFeatures({
 
   function searchForFeatures() {
     console.log('searching in cwf');
-    setLoading(true);
-    const findMatchesPromise =
-      calculateMatchCandidates(selectedFeatures)
-        .then((data) => setMatchCandidates(data));
-    Promise.all([findMatchesPromise]).finally(() => {
-      setLoading(false);
-      setResultModalOpen(true);
-    });
+    setResultModalOpen(true);
   }
 
   function clearFeatures() {

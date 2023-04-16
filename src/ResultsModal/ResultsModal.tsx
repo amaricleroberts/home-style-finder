@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { FeatureCardSubtitle } from "../components/HeroCard/CardWithFeatures";
 import FeatureSectionHeader from "../components/FeatureSectionHeader";
 import { ReadOutlined } from "@ant-design/icons";
-import { HomeStyle, HomeStyleMatch, StyleMatchCandidate } from "../features/featureList";
+import { HomeFeature, HomeStyle, HomeStyleMatch, StyleMatchCandidate } from "../features/featureList";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getSelectedFeatures } from "../redux/FeatureSlice";
+import { calculateMatchCandidates } from "../utils/functions";
 
 const StyledModal = styled(Modal)`
   border-radius: 0px;
@@ -21,7 +22,7 @@ type ResultsModalProps = {
   open: boolean;
   onCancel: () => void;
   onOk: () => void;
-  matchCandidates: StyleMatchCandidate[];
+  //matchCandidates: StyleMatchCandidate[];
   styles: HomeStyle[],
 }
 
@@ -29,18 +30,25 @@ export default function ResultsModal({
   open,
   onCancel,
   onOk,
-  matchCandidates,
   styles,
 }: ResultsModalProps) {
   const [loading, setLoading] = useState(true);
-  console.log(matchCandidates);
   const [styleMatches, setStyleMatches] = useState<HomeStyleMatch[]>([]);
   const selectedFeatures = useSelector(getSelectedFeatures);
+  const [matchCandidates, setMatchCandidates] = useState<StyleMatchCandidate[]>([]);
 
   console.log(selectedFeatures.length);
 
   useEffect(() => {
     console.log('doing things here');
+    setLoading(true);
+    const findMatchesPromise =
+      calculateMatchCandidates(selectedFeatures)
+        .then((data) => setMatchCandidates(data));
+    Promise.all([findMatchesPromise]);
+  }, [selectedFeatures]);
+
+  useEffect(() => {
     setLoading(true);
     let matchResult: HomeStyleMatch[] = [];
     matchCandidates.forEach((value) => {
@@ -59,7 +67,7 @@ export default function ResultsModal({
     })
     setStyleMatches(matchResult);
     setLoading(false);
-  }, []);
+  }, [matchCandidates]);
 
   console.log(styleMatches);
   return (
