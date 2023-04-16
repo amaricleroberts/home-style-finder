@@ -1,5 +1,5 @@
 import FeatureSectionHeader from '../../components/FeatureSectionHeader';
-import { Anchor, Col, Row } from 'antd';
+import { Anchor, Col, Row, Spin } from 'antd';
 import FeaturesCard from '../../components/FeatureCard/FeaturesCard';
 import firestoreQueries from '../../utils/readFromFirestore';
 import { useEffect, useState } from 'react';
@@ -9,14 +9,15 @@ import { AnchorLinkItemProps } from 'antd/es/anchor/Anchor';
 import HeroCard from '../../components/HeroCard/HeroCard';
 import { setHomeStyles } from '../../redux/FeatureSlice';
 import { useAppDispatch } from '../../redux/hooks';
+import { LoadingOutlined } from '@ant-design/icons';
+
+const spinIndicator = <LoadingOutlined style={{ fontSize: 40, color: '#457B9D' }} spin />;
 
 export default function FeatureSelector() {
   const [loading, setLoading] = useState(true);
   const [rawParts, setRawParts] = useState<DocumentData>();
   const [rawFeatures, setRawFeatures] = useState<DocumentData>();
   const dispatch = useAppDispatch();
-
-  console.log('loading feature selector');
 
   useEffect(() => {
     setLoading(true);
@@ -117,8 +118,10 @@ export default function FeatureSelector() {
           />
         </Col>
         <Col span={20}>
-          <HeroCard />
-          {featureMatrix}
+          <Spin spinning={loading} indicator={spinIndicator}>
+            <HeroCard />
+            {featureMatrix}
+          </Spin>
         </Col>
       </Row>
     </>
