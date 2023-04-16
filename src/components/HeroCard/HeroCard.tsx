@@ -3,19 +3,13 @@ import { useSelector } from "react-redux";
 import { getSelectedFeatures } from "../../redux/FeatureSlice";
 import CardWithFeatures from "./CardWithFeatures";
 import EmptyCard from "./EmptyCard";
-import { HomeStyle } from "../../features/featureList";
 
-type HeroCardProps = {
-  styles: HomeStyle[];
-}
-export default function HeroCard({
-  styles
-}: HeroCardProps) {
+export default function HeroCard() {
   const selectedFeatures = useSelector(getSelectedFeatures);
   
   return (
     <Row gutter={[24, 24]} justify='center'>
-      {selectedFeatures.length ? <CardWithFeatures styles={styles} /> : <EmptyCard />}
+      {selectedFeatures.length ? <CardWithFeatures /> : <EmptyCard />}
     </Row>
   );
 }

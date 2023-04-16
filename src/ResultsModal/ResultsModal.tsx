@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { FeatureCardSubtitle } from "../components/HeroCard/CardWithFeatures";
 import FeatureSectionHeader from "../components/FeatureSectionHeader";
 import { ReadOutlined } from "@ant-design/icons";
-import { HomeFeature, HomeStyle, HomeStyleMatch, StyleMatchCandidate } from "../features/featureList";
+import { HomeStyleMatch, StyleMatchCandidate } from "../features/featureList";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getSelectedFeatures } from "../redux/FeatureSlice";
+import { getHomeStyles, getSelectedFeatures } from "../redux/FeatureSlice";
 import { calculateMatchCandidates } from "../utils/functions";
 
 const StyledModal = styled(Modal)`
@@ -23,19 +23,19 @@ type ResultsModalProps = {
   onCancel: () => void;
   onOk: () => void;
   //matchCandidates: StyleMatchCandidate[];
-  styles: HomeStyle[],
+  //styles: HomeStyle[],
 }
 
 export default function ResultsModal({
   open,
   onCancel,
   onOk,
-  styles,
 }: ResultsModalProps) {
   const [loading, setLoading] = useState(true);
   const [styleMatches, setStyleMatches] = useState<HomeStyleMatch[]>([]);
   const selectedFeatures = useSelector(getSelectedFeatures);
   const [matchCandidates, setMatchCandidates] = useState<StyleMatchCandidate[]>([]);
+  const styles = useSelector(getHomeStyles);
 
   useEffect(() => {
     console.log('doing things here');

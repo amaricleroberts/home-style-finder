@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { HomeFeature } from "../features/featureList";
+import { HomeFeature, HomeStyle } from "../features/featureList";
 import { RootState } from "./store";
 
 type FeatureState = {
   selectedFeatures: HomeFeature[];
+  homeStyles: HomeStyle[];
 };
 
 const initialState: FeatureState = {
   selectedFeatures: [],
+  homeStyles: [],
 };
 
 export const FeatureSlice = createSlice({
@@ -41,13 +43,19 @@ export const FeatureSlice = createSlice({
 
       //console.log('selected features: ', state.selectedFeatures);
     },
+    setHomeStyles(state, { payload: styles}: PayloadAction<HomeStyle[]>) {
+      console.log('setting home styles to: ', styles);
+      state.homeStyles = styles;
+    }
   }
 })
 export const getSelectedFeatures = (state: RootState) => state.features.selectedFeatures;
+export const getHomeStyles = (state: RootState) => state.features.homeStyles;
 export const { 
   resetState,
   removeSelectedFeature,
   toggleSelectedFeature,
+  setHomeStyles,
 } = FeatureSlice.actions;
 
 export default FeatureSlice.reducer

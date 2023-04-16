@@ -7,35 +7,16 @@ import { DocumentData } from 'firebase/firestore';
 import { HomePart, HomeStyle } from '../../features/featureList';
 import { AnchorLinkItemProps } from 'antd/es/anchor/Anchor';
 import HeroCard from '../../components/HeroCard/HeroCard';
+import { setHomeStyles } from '../../redux/FeatureSlice';
+import { useAppDispatch } from '../../redux/hooks';
 
 export default function FeatureSelector() {
   const [loading, setLoading] = useState(true);
   const [rawParts, setRawParts] = useState<DocumentData>();
   const [rawFeatures, setRawFeatures] = useState<DocumentData>();
-  const [rawStyles, setRawStyles] = useState<DocumentData>();
+  const dispatch = useAppDispatch();
 
   console.log('loading feature selector');
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const stylesPromise =
-  //     firestoreQueries.getCollectionOrdered('styles', 'display_name', true)
-  //       .then((data) => {
-  //         let parsed: HomeStyle[] = [];
-  //         data.forEach((doc: DocumentData) => {
-  //           const docData = doc.data();
-  //           parsed.push({
-  //             id: doc.id,
-  //             display_name: docData.display_name,
-  //             images: docData.images,
-  //             time_period: docData.time_period,
-  //             origin: docData.origin
-  //           });
-  //         });
-  //         setStyles(parsed);
-  //       });
-  //   Promise.all([stylesPromise]).finally(() => setLoading(false));
-  // }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -45,9 +26,22 @@ export default function FeatureSelector() {
     const featuresPromise = firestoreQueries.getCollectionOrdered('features', 'priority', true).then((data) => {
       setRawFeatures(data)
     });
-    const stylesPromise = firestoreQueries.getCollectionOrdered('styles', 'display_name', true).then((data) => {
-      setRawStyles(data)
-    });
+    const stylesPromise = 
+      firestoreQueries.getCollectionOrdered('styles', 'display_name', true)
+      .then((data) => {
+        let parsed: HomeStyle[] = [];
+        data.forEach((doc: DocumentData) => {
+          const docData = doc.data();
+          parsed.push({
+            id: doc.id,
+            display_name: docData.display_name,
+            images: docData.images,
+            time_period: docData.time_period,
+            origin: docData.origin
+          });
+        });
+        dispatch(setHomeStyles(parsed));
+      });
     Promise.all([partsPromise, featuresPromise, stylesPromise]).finally(() => setLoading(false));
   }, []);
 
@@ -79,20 +73,6 @@ export default function FeatureSelector() {
       console.warn('missing part category: ', featureDocData.parent.id);
     }
   });
-
-  let homeStyles: HomeStyle[] = [];
-  if (rawStyles) rawStyles.forEach((doc: DocumentData) => {
-    const docData = doc.data();
-    homeStyles.push({
-      id: doc.id,
-      display_name: docData.display_name,
-      images: docData.images,
-      time_period: docData.time_period,
-      origin: docData.origin
-    });
-  });
-
-  console.log('home styles: ', homeStyles);
 
   const featureMatrix: JSX.Element[] = [];
   const anchorItems: AnchorLinkItemProps[] = [];
@@ -136,7 +116,7 @@ export default function FeatureSelector() {
           />
         </Col>
         <Col span={20}>
-          <HeroCard styles={homeStyles} />
+          <HeroCard />
           {featureMatrix}
         </Col>
       </Row>
