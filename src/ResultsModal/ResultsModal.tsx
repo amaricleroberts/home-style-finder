@@ -22,8 +22,6 @@ type ResultsModalProps = {
   open: boolean;
   onCancel: () => void;
   onOk: () => void;
-  //matchCandidates: StyleMatchCandidate[];
-  //styles: HomeStyle[],
 }
 
 export default function ResultsModal({
@@ -44,6 +42,7 @@ export default function ResultsModal({
       calculateMatchCandidates(selectedFeatures)
         .then((data) => setMatchCandidates(data));
     Promise.all([findMatchesPromise]);
+    setLoading(false);
   }, [selectedFeatures]);
 
   useEffect(() => {
@@ -65,6 +64,7 @@ export default function ResultsModal({
     })
     setStyleMatches(matchResult);
     setLoading(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [matchCandidates]);
 
   console.log(styleMatches);
@@ -80,7 +80,7 @@ export default function ResultsModal({
     >
       <List
         header={<FeatureCardSubtitle>RESULTS</FeatureCardSubtitle>}
-        loading={loading} //todo
+        loading={loading}
       >
         {styleMatches.map((value, index) => {
           return (

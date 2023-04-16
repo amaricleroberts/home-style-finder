@@ -1,4 +1,4 @@
-import { Loading3QuartersOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import {  Button, Col, Row, Space, Tag } from "antd";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -31,7 +31,6 @@ export const FeatureCardSubtitle = styled.p`
 `;
 
 export default function CardWithFeatures() {
-  const [loading, setLoading] = useState<boolean>(false);
   const [resultModalOpen, setResultModalOpen] = useState<boolean>(false);
   const selectedFeatures = useSelector(getSelectedFeatures);
   const dispatch = useAppDispatch();
@@ -48,21 +47,21 @@ export default function CardWithFeatures() {
     );
   })
 
-  const cardToUse = loading ? 
-    (
-      <WrapperDiv>
-        <Row justify={'center'}>
-          <Space direction="vertical" align="center">
-            <Loading3QuartersOutlined
-              spin={true}
-              style={{ fontSize: '55px', color: '#457B9D'}}
-            />
-            <FeatureCardSubtitle>Calculating home style...</FeatureCardSubtitle>
-          </Space>
-        </Row>
-      </WrapperDiv>
-    ) :
-    (
+  //     <WrapperDiv>
+  //       <Row justify={'center'}>
+  //         <Space direction="vertical" align="center">
+  //           <Loading3QuartersOutlined
+  //             spin={true}
+  //             style={{ fontSize: '55px', color: '#457B9D'}}
+  //           />
+  //           <FeatureCardSubtitle>Calculating home style...</FeatureCardSubtitle>
+  //         </Space>
+  //       </Row>
+  //     </WrapperDiv>
+  //   ) :
+
+  return (
+    <>
       <WrapperDiv>
         <Row style={{ marginBottom: '6px' }}>
           <FeatureCardSubtitle>Selected Features:</FeatureCardSubtitle>
@@ -76,7 +75,7 @@ export default function CardWithFeatures() {
               type='primary'
               icon={<SearchOutlined />}
               onClick={() => searchForFeatures()}
-              //disabled={selectedFeatures.length < 3}
+            //disabled={selectedFeatures.length < 3}
             >
               Find Style
             </Button>
@@ -84,10 +83,6 @@ export default function CardWithFeatures() {
           </Space>
         </Row>
       </WrapperDiv>
-    );
-  return (
-    <>
-      {cardToUse}
       <ResultsModal
         open={resultModalOpen}
         onCancel={() => setResultModalOpen(false)}
@@ -100,7 +95,6 @@ export default function CardWithFeatures() {
   );
 
   function searchForFeatures() {
-    console.log('searching in cwf');
     setResultModalOpen(true);
   }
 

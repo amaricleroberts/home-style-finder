@@ -43,6 +43,7 @@ export default function FeatureSelector() {
         dispatch(setHomeStyles(parsed));
       });
     Promise.all([partsPromise, featuresPromise, stylesPromise]).finally(() => setLoading(false));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let featureCategories: {[key: string]: HomePart} = {};
