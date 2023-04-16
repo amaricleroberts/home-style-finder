@@ -81,13 +81,15 @@ export default function ResultsModal({
       <List
         header={<FeatureCardSubtitle>RESULTS</FeatureCardSubtitle>}
         loading={loading}
+        bordered={false}
+        itemLayout="vertical"
       >
         {styleMatches.map((value, index) => {
           return (
             <List.Item key={index}>
               <Row gutter={[8, 8]}>
                 <Col span={8}>
-                  <Carousel>
+                  <Carousel autoplay={true}>
                     {value.images?.map((image: string, index: number) => {
                       return (
                         <CarouselImage key={index} src={`images/${image}`} preview={false} width={'200px'} />
@@ -102,7 +104,7 @@ export default function ResultsModal({
                       weight="sub"
                       id={value.id}
                     />
-                    <Progress percent={value.percentage_match} />
+                    <Progress percent={value.percentage_match} showInfo={false} />
                     <Button type='default' icon={<ReadOutlined />}>Learn More</Button>
                   </Space>
                 </Col>
