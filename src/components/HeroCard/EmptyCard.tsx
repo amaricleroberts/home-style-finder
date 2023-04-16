@@ -19,7 +19,7 @@ const StyledSubtitle = styled.p`
   text-align: center;
 `;
 
-export default function EmptyResultsCard() {
+export default function EmptyCard() {
   return (
     <WrapperDiv>
       <Space direction="vertical" align="center" size="large" style={{ width: '100%' }}>

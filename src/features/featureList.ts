@@ -21,7 +21,12 @@ export type HomeStyle = {
   images?: string[];
 };
 
-export interface StyleMatchCandidate {
+export type HomeStyleMatch = HomeStyle & {
+  percentage_match: number;
+};
+
+export type StyleMatchCandidate = {
   key: string;
   score: number;
+  percentage_match?: number;
 };

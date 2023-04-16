@@ -45,7 +45,6 @@ export default function FeaturesCard({
   )
 
   function toggleFeature(feature: HomeFeature): void {
-    //console.log('toggling on feature: ', feature);
     dispatch(toggleSelectedFeature(feature));
   }
 }
