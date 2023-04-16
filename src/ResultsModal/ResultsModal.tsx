@@ -1,7 +1,5 @@
-import { Button, Carousel, Col, Image, List, Modal, Progress, Row, Space } from "antd";
+import { Button, Col, Image, List, Modal, Row, Space, Typography } from "antd";
 import styled from "styled-components";
-import { FeatureCardSubtitle } from "../components/HeroCard/CardWithFeatures";
-import FeatureSectionHeader from "../components/FeatureSectionHeader";
 import { ReadOutlined } from "@ant-design/icons";
 import { HomeStyleMatch, StyleMatchCandidate } from "../features/featureList";
 import { useEffect, useState } from "react";
@@ -14,8 +12,30 @@ const StyledModal = styled(Modal)`
   width: 600px;
 `;
 
-const CarouselImage = styled(Image)`
+const StyleImage = styled(Image)`
   objectFit: 'contain';
+`;
+
+const ModalHeader = styled(Typography.Paragraph)`
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-weight: 700;
+  font-size: 1.5em;
+  line-height: 22px;
+  text-transform: uppercase;
+  margin-top: 1em;
+  letter-spacing: 0.04em;
+  text-align: center;
+`;
+
+const StyleHeader = styled(Typography.Paragraph)`
+  font-family: 'Georgia';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.2em;
+  line-height: 22px;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.02em;
 `;
 
 type ResultsModalProps = {
@@ -79,32 +99,23 @@ export default function ResultsModal({
       width={850}
     >
       <List
-        header={<FeatureCardSubtitle>RESULTS</FeatureCardSubtitle>}
+        header={<ModalHeader>Results</ModalHeader>}
         loading={loading}
         bordered={false}
         itemLayout="vertical"
+        split={false}
       >
         {styleMatches.map((value, index) => {
           return (
             <List.Item key={index}>
-              <Row gutter={[8, 8]}>
-                <Col span={8}>
-                  <Carousel autoplay={true}>
-                    {value.images?.map((image: string, index: number) => {
-                      return (
-                        <CarouselImage key={index} src={`images/${image}`} preview={false} width={'200px'} />
-                      )
-                    })}
-                  </Carousel>
+              <Row gutter={[8, 8]} style={{ borderStyle: 'solid', borderColor: '#B5BDC8', borderWidth: 1 }}>
+                <Col span={8} style={{paddingLeft: 'unset', paddingRight: 'unset' }}>
+                  <StyleImage preview={false} src={`images/${value.images?.[0]}`} width={'200px'} />
                 </Col>
-                <Col span={16}>
-                  <Space direction='vertical'>
-                    <FeatureSectionHeader
-                      title={value.display_name}
-                      weight="sub"
-                      id={value.id}
-                    />
-                    <Progress percent={value.percentage_match} showInfo={false} />
+                <Col span={16} style={{marginTop: 12}}>
+                  <Space direction='vertical' size='small'>
+                    <StyleHeader>{value.display_name}</StyleHeader>
+                    {/* <Progress percent={value.percentage_match} showInfo={false} /> */}
                     <Button type='default' icon={<ReadOutlined />}>Learn More</Button>
                   </Space>
                 </Col>

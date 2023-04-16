@@ -20,7 +20,7 @@ const FeatureTag = styled(Tag)`
   border-radius: 1px;
   margin: 4px 4px;
 `;
-export const FeatureCardSubtitle = styled.p`
+const FeatureCardSubtitle = styled.p`
   font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 1.25rem;
   line-height: 0rem;

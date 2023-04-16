@@ -76,17 +76,22 @@ body {
   border-radius: 0px;
 }
 
+.ant-btn-default {
+  border-color: #457B9D;
+  color: #457B9D;
+}
+
+.ant-btn-default:hover {
+  border-color: #2D3F5E !important;
+  color: #2D3F5E !important;
+}
+
 .ant-btn-primary {
   background-color: #2D3F5E;
 }
 
 .ant-btn-primary:hover {
   background-color: #476393 !important;
-}
-
-.ant-btn-default:hover {
-  border-color: #476393 !important;
-  color: #476393 !important;
 }
 
 .ant-menu-item-selected {
